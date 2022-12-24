@@ -1,16 +1,62 @@
+
+import java.util.Arrays;
+import java.util.Queue;
+import java.util.LinkedList;
 public class free_list {
     public static void main(String[] args) {
+        //dataset 
         FreeList list=new FreeList();
-        list.free(4096);
+        list.free(4096); //free list intially one chunk of size 4096kb
+        // requests for memeory allocation
+       request[] requestList;
+       requestList =new request[8];
+        requestList[0]=new request(0, 10, 3);
+        requestList[1]=new request(2, 20, 5);
+        requestList[2]= new request(10, 50, 16);
+        requestList[3]= new request(7, 30, 10);
+        requestList[4]= new request(20, 100, 25);
+        requestList[5]=new request(12, 120, 15);
+        requestList[6]= new request(1, 5, 6);
+        requestList[7]= new request(22, 500, 26);
        
-        list.displayFreeList();
+        int[] time=new int[requestList.length];
+        for (int i = 0; i < time.length; i++) {
+            time[i]=requestList[i].arrivalTime;
+        }
+        Arrays.sort(time);
+        Queue<request> RequestsQueue = new LinkedList<request>();
+        
+        int size=requestList.length;
+        for (int i = 0; i < size; i++) {
+         for (int j = 0; j < size; j++) {
+            if(time[i]==requestList[j].arrivalTime)
+            {
+                RequestsQueue.add(requestList[j]);
+                break;
+            }
+         }
+        }
+        //end of dataset
+        
+
+
+        
         }
 
 
     
 }
 
-
+/*
+ * new request(0, 10, 3),
+         new request(2, 20, 5),
+        new request(10, 50, 16),
+        new request(7, 30, 10),
+        new request(20, 100, 25),
+        new request(12, 120, 15),
+        new request(1, 5, 6),
+        new request(22, 500, 26)
+ */
 
 
 class Node
@@ -91,6 +137,14 @@ System.out.println("");
 }
 
 }
-
-
-
+class request{
+    int arrivalTime;
+    int size;
+    int freeTime;
+    public request(int aTime, int s, int fTime)
+    {
+        arrivalTime=aTime;
+        size=s;
+        freeTime=fTime;
+    }
+}
