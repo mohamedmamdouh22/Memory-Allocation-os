@@ -1,9 +1,7 @@
 public class free_list {
     public static void main(String[] args) {
         FreeList list=new FreeList();
-        list.free(2);
-        list.free(3);
-        list.free(1);
+        list.free(4096);
        
         list.displayFreeList();
         }
@@ -93,5 +91,6 @@ System.out.println("");
 }
 
 }
+
 
 
