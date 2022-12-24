@@ -37,8 +37,6 @@ public class free_list {
          }
         }
         //end of dataset
-        
-
 
         
         }
@@ -47,16 +45,7 @@ public class free_list {
     
 }
 
-/*
- * new request(0, 10, 3),
-         new request(2, 20, 5),
-        new request(10, 50, 16),
-        new request(7, 30, 10),
-        new request(20, 100, 25),
-        new request(12, 120, 15),
-        new request(1, 5, 6),
-        new request(22, 500, 26)
- */
+
 
 
 class Node
