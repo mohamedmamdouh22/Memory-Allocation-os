@@ -10,14 +10,14 @@ public class App {
         // requests for memeory allocation
        request[] requestList;
        requestList =new request[8];
-        requestList[0]=new request(0, 10, 3);
-        requestList[1]=new request(2, 20, 5);
-        requestList[2]= new request(10, 50, 16);
-        requestList[3]= new request(7, 30, 10);
-        requestList[4]= new request(20, 100, 25);
-        requestList[5]=new request(12, 120, 15);
-        requestList[6]= new request(1, 5, 6);
-        requestList[7]= new request(22, 500, 26);
+         requestList[0]=new request(0, 10, 3); //1
+        requestList[1]=new request(2, 20, 5); //3
+        requestList[2]= new request(10, 50, 16); //5
+        requestList[3]= new request(7, 30, 10); //4
+        requestList[4]= new request(20, 100, 25); //7
+       requestList[5]=new request(12, 120, 15); //6
+        requestList[6]= new request(1, 5, 6);  //2
+        requestList[7]= new request(22, 500, 26);//8
        
         int[] time=new int[requestList.length];
         for (int i = 0; i < time.length; i++) {
@@ -37,8 +37,34 @@ public class App {
          }
         }
         //end of dataset
-
+        worestFit(RequestsQueue, list);
         
+        }//end main
+        public static void worestFit(Queue<request> q,FreeList list)
+        {   
+            int reqs=q.size(); // no of requests in queue
+            int[] fTimes=new int[0];
+            int[] sizes=new int[0];
+            for (int i = 0; i < reqs; i++) {
+
+                request next= q.remove();
+                fTimes=Arrays.copyOf(fTimes, fTimes.length+1);
+                fTimes[fTimes.length-1]=next.freeTime;
+                sizes=Arrays.copyOf(sizes, sizes.length+1);
+                sizes[sizes.length-1]=next.size;
+                
+                for (int j = 0; j < sizes.length; j++) {
+                     if(fTimes[j]<next.arrivalTime)
+                    {
+                        list.free(sizes[j]);
+                        fTimes[j]=100000;
+                    }
+                    
+                }
+                list.displayFreeList();
+
+
+            }
         }
 
 
