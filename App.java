@@ -9,15 +9,15 @@ public class App {
         list.free(4096); //free list intially one chunk of size 4096kb
         // requests for memeory allocation
        request[] requestList;
-       requestList =new request[8];
-         requestList[0]=new request(0, 10, 3); //1
-        requestList[1]=new request(2, 20, 5); //3
-        requestList[2]= new request(10, 50, 16); //5
-        requestList[3]= new request(7, 30, 10); //4
-        requestList[4]= new request(20, 100, 25); //7
-       requestList[5]=new request(12, 120, 15); //6
-        requestList[6]= new request(1, 5, 6);  //2
-        requestList[7]= new request(22, 500, 26);//8
+       requestList =new request[3];
+          requestList[0]=new request(0, 10, 3); //1
+         requestList[1]=new request(2, 20, 5); //3
+    //     requestList[2]= new request(10, 50, 16); //5
+         requestList[2]= new request(7, 5, 10); //4
+    //     requestList[4]= new request(20, 100, 25); //7
+    //    requestList[5]=new request(12, 120, 15); //6
+    //     requestList[6]= new request(1, 5, 6);  //2
+    //     requestList[7]= new request(22, 500, 26);//8
        
         int[] time=new int[requestList.length];
         for (int i = 0; i < time.length; i++) {
@@ -37,7 +37,8 @@ public class App {
          }
         }
         //end of dataset
-        worestFit(RequestsQueue, list);
+        
+        worestFit(RequestsQueue,list);
         
         }//end main
         public static void worestFit(Queue<request> q,FreeList list)
@@ -61,7 +62,23 @@ public class App {
                     }
                     
                 }
+                System.out.println("free list befor allocating: ");
                 list.displayFreeList();
+                Node current=list.f();
+                while(current!=null)
+                {
+                    if(current.size>next.size){
+                        System.out.println("request size: "+next.size +" allocated in block size: "+current.size);
+                        current.size-=next.size;
+
+                        break;
+                    }
+                    current=current.next;
+                }
+                System.out.println("free list after allocationg");
+                list.displayFreeList();
+                
+System.out.println("*********************************************************");
 
 
             }
@@ -102,6 +119,9 @@ public FreeList() {
 public boolean isEmpty(){ 
  return (first==null);
  
+}
+public Node f(){
+    return first;
 }
 public void free(long elem) 
  { 
