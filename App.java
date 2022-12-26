@@ -1,6 +1,3 @@
-package com.mycompany.app;
-
-
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -116,7 +113,11 @@ public class App {
             // 10
 
         }
-        list.free(sizes[sizes.length-1]);
+        for (int i = 0; i < sizes.length; i++) {
+            if(fTimes[i]!=100000){
+                list.free(sizes[i]);
+            }
+        }
         System.out.println("*********************************************************");
         System.out.println("Free list after all allocations");
         list.displayFreeList();
@@ -191,7 +192,11 @@ public class App {
             }
             
         }
-        list.free(sizes[sizes.length-1]);
+        for (int i = 0; i < sizes.length; i++) {
+            if(fTimes[i]!=100000){
+                list.free(sizes[i]);
+            }
+        }
         System.out.println("*********************************************************");
         System.out.println("Free list after all allocations");
         list.displayFreeList();
@@ -265,7 +270,11 @@ public class App {
             // 10
 
         }
-        list.free(sizes[sizes.length-1]);
+        for (int i = 0; i < sizes.length; i++) {
+            if(fTimes[i]!=100000){
+                list.free(sizes[i]);
+            }
+        }
         System.out.println("*********************************************************");
         System.out.println("Free list after all allocations");
         list.displayFreeList();   
