@@ -1,4 +1,5 @@
 
+
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -65,25 +66,7 @@ public class App {
                 }
             }
 
-            // first fit algorithm
-            // System.out.println("free list befor allocating: ");
-            // list.displayFreeList();
-            // Node current=list.f();
-            // while(current!=null)
-            // {
-            // if(current.size>next.size){
-            // System.out.println("request size: "+next.size +" allocated in block size:
-            // "+current.size);
-            // current.size-=next.size;
-
-            // break;
-            // }
-            // current=current.next;
-            // }
-            // System.out.println("free list after allocationg");
-            // list.displayFreeList();
-
-            // System.out.println("*********************************************************");
+            
 
             // worst fit algorithm
             System.out.println("free list befor allocating: ");
@@ -150,6 +133,10 @@ public static void bestFit(Queue<request> q, FreeList list) {
             // best fit algorithm
             System.out.println("free list befor allocating: ");
             list.displayFreeList();
+            int total = 100;
+            long free = list.TotalSize();
+
+            System.out.println("Total size " + total + " used: " + (total - free) + " free: " + free);
             Node curr = list.f();
             int x=0;
             Node best=curr;
@@ -172,7 +159,7 @@ public static void bestFit(Queue<request> q, FreeList list) {
                 
             }
             
-            System.out.println("best: "+best.size);
+            
             
             if(next.size>best.size) {
                 System.out.println("Request size "+next.size+" can not be allocated");
