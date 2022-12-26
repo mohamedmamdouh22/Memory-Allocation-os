@@ -80,8 +80,10 @@ public class App {
             // worst fit algorithm
             System.out.println("free list befor allocating: ");
             list.displayFreeList();
+            int total=100;    
+            long free=list.TotalSize();
 
-            System.out.println("Total size of free list befor allocating: " + list.TotalSize());
+            System.out.println("Total size " +total+" used: "+(total-free)+" free: "+free );
 
             Node curr = list.f();
             int x = 0;
@@ -184,6 +186,7 @@ class FreeList {
     }
 
     public long TotalSize() {
+        long totalSize=0;
         Node current = first;
         while (current != null) {
             totalSize += current.size;
