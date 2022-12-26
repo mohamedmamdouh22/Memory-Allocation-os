@@ -7,12 +7,12 @@ public class App {
     public static void main(String[] args) {
         // dataset
         FreeList list = new FreeList();
-        list.free(100); // free list intially one chunk of size 4096kb
+        list.free(30); // free list intially one chunk of size 4096kb
         // requests for memeory allocation
         request[] requestList;
         requestList = new request[3];
         requestList[0] = new request(0, 10, 3); // 1
-        requestList[1] = new request(2, 100, 5); // 3
+        requestList[1] = new request(2, 20, 5); // 3
         // requestList[2]= new request(10, 50, 16); //5
         requestList[2] = new request(7, 5, 10); // 4
         // requestList[4]= new request(20, 100, 25); //7
@@ -80,16 +80,15 @@ public class App {
             // worst fit algorithm
             System.out.println("free list befor allocating: ");
             list.displayFreeList();
-            int total=100;    
-            long free=list.TotalSize();
+            int total = 100;
+            long free = list.TotalSize();
 
-            System.out.println("Total size " +total+" used: "+(total-free)+" free: "+free );
+            System.out.println("Total size " + total + " used: " + (total - free) + " free: " + free);
 
             Node curr = list.f();
             int x = 0;
 
             Node max = curr;
-
             while (curr.next != null) {
                 if (curr.size < curr.next.size) {
                     max = curr.next;
@@ -102,9 +101,6 @@ public class App {
             } else {
                 System.out.println("Request size " + next.size + " allocated in block size " + max.size);
                 max.size -= next.size;
-                long total = list.TotalSize();
-                total -= next.size;
-                System.out.println("Total size of free list after allocating: " + total);
 
                 x = 1;
             }
@@ -120,6 +116,7 @@ public class App {
                 sizes[sizes.length - 1] = next.size;
 
             }
+
             // 0
             // 10
 
@@ -186,7 +183,7 @@ class FreeList {
     }
 
     public long TotalSize() {
-        long totalSize=0;
+        long totalSize = 0;
         Node current = first;
         while (current != null) {
             totalSize += current.size;
@@ -205,6 +202,22 @@ class FreeList {
         }
 
         System.out.println("");
+
+    }
+
+    public void remove(Node x) {
+        Node current = first;
+        Node prev = null;
+        while (current != null) {
+            if (current == x) {
+                prev.next = current.next;
+                break;
+
+            }
+            prev = current;
+            current = current.next;
+
+        }
 
     }
 
