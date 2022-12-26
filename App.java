@@ -125,7 +125,71 @@ public class App {
 
         }
     }
+public static void bestFit(Queue<request> q, FreeList list) {
+        int reqs = q.size(); // no of requests in queue
+        int[] fTimes = new int[0];
+        int[] sizes = new int[0];
+        for (int i = 0; i < reqs; i++) {
 
+            request next = q.remove();
+            for (int j = 0; j < sizes.length; j++) {
+                if (fTimes[j] < next.arrivalTime) {
+                    list.free(sizes[j]);
+                    fTimes[j] = 100000;
+                }
+            }
+             
+            // best fit algorithm
+            System.out.println("free list befor allocating: ");
+            list.displayFreeList();
+            Node curr = list.f();
+            int x=0;
+            Node best=curr;
+            
+            while (curr != null) {
+                
+                if (best.size<curr.size) {
+                    best=curr;
+                }
+                curr=curr.next;
+                
+            }
+            curr = list.f();
+            while (curr != null) {
+                
+                if (best.size>curr.size&&curr.size>=next.size) {
+                    best=curr;
+                }
+                curr=curr.next;
+                
+            }
+            
+            System.out.println("best: "+best.size);
+            
+            if(next.size>best.size) {
+                System.out.println("Request size "+next.size+" can not be allocated");
+
+            }else{
+                System.out.println("Request size "+next.size+" allocated in block size "+best.size);
+                best.size-=next.size;
+                x=1;
+            }
+            
+            System.out.println("free list after allocationg");
+            list.displayFreeList();
+
+            //=======================
+            System.out.println("*********************************************************");
+            if(x==1){ //sucessfully allocated
+                fTimes = Arrays.copyOf(fTimes, fTimes.length + 1);
+                fTimes[fTimes.length - 1] = next.freeTime;
+                sizes = Arrays.copyOf(sizes, sizes.length + 1);
+                sizes[sizes.length - 1] = next.size;
+    
+            }
+            
+        }
+    }
 }
 
 class Node {
