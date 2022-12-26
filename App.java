@@ -1,3 +1,5 @@
+package com.mycompany.app;
+
 
 import java.util.Arrays;
 import java.util.Queue;
@@ -114,6 +116,10 @@ public class App {
             // 10
 
         }
+        list.free(sizes[sizes.length-1]);
+        System.out.println("*********************************************************");
+        System.out.println("Free list after all allocations");
+        list.displayFreeList();
         
     }
     
@@ -185,6 +191,10 @@ public class App {
             }
             
         }
+        list.free(sizes[sizes.length-1]);
+        System.out.println("*********************************************************");
+        System.out.println("Free list after all allocations");
+        list.displayFreeList();
     }
     
     public static void firstFit(Queue<request> q, FreeList list) {
@@ -255,7 +265,10 @@ public class App {
             // 10
 
         }
-        
+        list.free(sizes[sizes.length-1]);
+        System.out.println("*********************************************************");
+        System.out.println("Free list after all allocations");
+        list.displayFreeList();   
     }
     
 }
