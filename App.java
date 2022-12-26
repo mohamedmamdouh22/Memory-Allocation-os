@@ -1,5 +1,4 @@
 
-
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -21,7 +20,7 @@ public class App {
          requestList[4]= new request(20, 50, 25); //7
          requestList[5]=new request(12, 120, 15); //6
          requestList[6]= new request(1, 5, 6); //2
-         requestList[7]= new request(22, 30, 26);//8
+         requestList[7]= new request(22, 15, 26);//8
 
         int[] time = new int[requestList.length];
         for (int i = 0; i < time.length; i++) {
@@ -46,8 +45,8 @@ public class App {
             worestFit(RequestsQueue, list);
         else if(x==2)
             bestFit(RequestsQueue, list);
-        //else 
-            //firstFit(RequestsQueue, list);
+        else 
+            firstFit(RequestsQueue, list);
 
     }// end main
 
@@ -115,12 +114,10 @@ public class App {
             // 10
 
         }
-        list.free(sizes[sizes.length-1]);
-        System.out.println("*********************************************************");
-        System.out.println("Free list after all allocations");
-        list.displayFreeList();
+        
     }
-public static void bestFit(Queue<request> q, FreeList list) {
+    
+    public static void bestFit(Queue<request> q, FreeList list) {
         int reqs = q.size(); // no of requests in queue
         int[] fTimes = new int[0];
         int[] sizes = new int[0];
@@ -186,13 +183,81 @@ public static void bestFit(Queue<request> q, FreeList list) {
                 sizes[sizes.length - 1] = next.size;
     
             }
-  
+            
         }
-        list.free(sizes[sizes.length-1]);
-        System.out.println("*********************************************************");
-        System.out.println("Free list after all allocations");
-        list.displayFreeList();
     }
+    
+    public static void firstFit(Queue<request> q, FreeList list) {
+        int reqs = q.size(); // no of requests in queue
+        int[] fTimes = new int[0];
+        int[] sizes = new int[0];
+
+        for (int i = 0; i < reqs; i++) {
+
+            request next = q.remove();
+            for (int j = 0; j < sizes.length; j++) {
+                if (fTimes[j] < next.arrivalTime) {
+                    list.free(sizes[j]);
+                    fTimes[j] = 100000;
+                }
+            }
+
+            
+
+            // first fit algorithm
+            System.out.println("free list befor allocating: ");
+            list.displayFreeList();
+            int total = 100;
+            long free = list.TotalSize();
+
+            System.out.println("Total size " + total + " used: " + (total - free) + " free: " + free);
+
+            Node curr = list.f();
+            int x = 0;
+
+            Node first_fit = curr;
+            while (curr != null) {
+                if(curr.size>=next.size)
+                {
+                    first_fit=curr;
+                    break;
+                    
+                }
+                    
+                curr=curr.next;
+            }
+            if (next.size > first_fit.size) {
+                System.out.println("Request size " + next.size + " can not be allocated");
+
+            } else {
+                System.out.println("Request size " + next.size + " allocated in block size " + first_fit.size);
+                first_fit.size -= next.size;
+                // if(first_fit.size==0)
+                  //  list.remove(first_fit);
+                
+
+                x = 1;
+            }
+
+            System.out.println("free list after allocationg");
+            list.displayFreeList();
+
+            System.out.println("*********************************************************");
+            if (x == 1) { // sucessfully allocated
+                fTimes = Arrays.copyOf(fTimes, fTimes.length + 1);
+                fTimes[fTimes.length - 1] = next.freeTime;
+                sizes = Arrays.copyOf(sizes, sizes.length + 1);
+                sizes[sizes.length - 1] = next.size;
+
+            }
+
+            // 0
+            // 10
+
+        }
+        
+    }
+    
 }
 
 class Node {
@@ -268,8 +333,11 @@ class FreeList {
         Node current = first;
 
         while (current != null) {
+            if(current.size==0)
+                current = current.next;
+            else{
             current.displayNode();
-            current = current.next;
+            current = current.next;}
         }
 
         System.out.println("");
