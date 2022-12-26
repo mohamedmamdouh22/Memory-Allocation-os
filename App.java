@@ -12,7 +12,7 @@ public class App {
         request[] requestList;
         requestList = new request[3];
         requestList[0] = new request(0, 10, 3); // 1
-        requestList[1] = new request(2, 20, 5); // 3
+        requestList[1] = new request(2, 100, 5); // 3
         // requestList[2]= new request(10, 50, 16); //5
         requestList[2] = new request(7, 5, 10); // 4
         // requestList[4]= new request(20, 100, 25); //7
@@ -49,18 +49,13 @@ public class App {
         for (int i = 0; i < reqs; i++) {
 
             request next = q.remove();
-            fTimes = Arrays.copyOf(fTimes, fTimes.length + 1);
-            fTimes[fTimes.length - 1] = next.freeTime;
-            sizes = Arrays.copyOf(sizes, sizes.length + 1);
-            sizes[sizes.length - 1] = next.size;
-
             for (int j = 0; j < sizes.length; j++) {
                 if (fTimes[j] < next.arrivalTime) {
                     list.free(sizes[j]);
                     fTimes[j] = 100000;
                 }
-
             }
+          
             // first fit algorithm
             // System.out.println("free list befor allocating: ");
             // list.displayFreeList();
@@ -85,23 +80,39 @@ public class App {
             System.out.println("free list befor allocating: ");
             list.displayFreeList();
             Node curr = list.f();
+            int x=0;
+            Node max=curr;
             while (curr.next != null) {
-
-
-                if (curr.size < curr.next.size) {
-                    curr = curr.next;
+                if (curr.size <curr.next.size ) {
+                    max=curr.next;
                 }
-
+                curr=curr.next;
             }
+            if(next.size>max.size) {
+                System.out.println("Request size "+next.size+" can not be allocated");
+
+            }else{
+                System.out.println("Request size "+next.size+" allocated in block size "+max.size);
+                max.size-=next.size;
+                x=1;
+            }
+
             
 
-                System.out.println("request size: " + next.size + " allocated in block size: " + curr.size);
-            curr.size -= next.size;
-
+            
             System.out.println("free list after allocationg");
             list.displayFreeList();
 
             System.out.println("*********************************************************");
+            if(x==1){ //sucessfully allocated
+                fTimes = Arrays.copyOf(fTimes, fTimes.length + 1);
+                fTimes[fTimes.length - 1] = next.freeTime;
+                sizes = Arrays.copyOf(sizes, sizes.length + 1);
+                sizes[sizes.length - 1] = next.size;
+    
+            }
+            //0
+            //10
             
 
 
