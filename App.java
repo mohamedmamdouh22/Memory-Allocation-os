@@ -39,14 +39,14 @@ public class App {
             }
         }
         // end of dataset
-        System.out.println("press 1 for worst fit \n press 2 for best fit \n press 3 for first fit");
+        System.out.println("press 1 for worst fit \npress 2 for best fit \npress 3 for first fit");
         int x=input.nextInt();
         if(x==1)
             worestFit(RequestsQueue, list);
         else if(x==2)
             bestFit(RequestsQueue, list);
-        else 
-            firstFit(RequestsQueue, list);
+        //else 
+            //firstFit(RequestsQueue, list);
 
     }// end main
 
