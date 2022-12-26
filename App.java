@@ -115,6 +115,10 @@ public class App {
             // 10
 
         }
+        list.free(sizes[sizes.length-1]);
+        System.out.println("*********************************************************");
+        System.out.println("Free list after all allocations");
+        list.displayFreeList();
     }
 public static void bestFit(Queue<request> q, FreeList list) {
         int reqs = q.size(); // no of requests in queue
@@ -182,8 +186,12 @@ public static void bestFit(Queue<request> q, FreeList list) {
                 sizes[sizes.length - 1] = next.size;
     
             }
-            
+  
         }
+        list.free(sizes[sizes.length-1]);
+        System.out.println("*********************************************************");
+        System.out.println("Free list after all allocations");
+        list.displayFreeList();
     }
 }
 
