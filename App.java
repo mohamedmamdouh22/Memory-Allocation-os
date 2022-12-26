@@ -46,6 +46,7 @@ public class App {
         int reqs = q.size(); // no of requests in queue
         int[] fTimes = new int[0];
         int[] sizes = new int[0];
+
         for (int i = 0; i < reqs; i++) {
 
             request next = q.remove();
@@ -55,7 +56,7 @@ public class App {
                     fTimes[j] = 100000;
                 }
             }
-          
+
             // first fit algorithm
             // System.out.println("free list befor allocating: ");
             // list.displayFreeList();
@@ -79,45 +80,42 @@ public class App {
             // worst fit algorithm
             System.out.println("free list befor allocating: ");
             list.displayFreeList();
+
+            System.out.println("Total size of free list befor allocating: " + list.TotalSize());
+
             Node curr = list.f();
-            int x=0;
-            Node max=curr;
+            int x = 0;
+
+            Node max = curr;
+
             while (curr.next != null) {
-                if (curr.size <curr.next.size ) {
-                    max=curr.next;
+                if (curr.size < curr.next.size) {
+                    max = curr.next;
                 }
-                curr=curr.next;
+                curr = curr.next;
             }
-            if(next.size>max.size) {
-                System.out.println("Request size "+next.size+" can not be allocated");
+            if (next.size > max.size) {
+                System.out.println("Request size " + next.size + " can not be allocated");
 
-            }else{
-                System.out.println("Request size "+next.size+" allocated in block size "+max.size);
-                max.size-=next.size;
-                x=1;
+            } else {
+                System.out.println("Request size " + next.size + " allocated in block size " + max.size);
+                max.size -= next.size;
+                x = 1;
             }
 
-            
-
-            
             System.out.println("free list after allocationg");
             list.displayFreeList();
 
             System.out.println("*********************************************************");
-            if(x==1){ //sucessfully allocated
+            if (x == 1) { // sucessfully allocated
                 fTimes = Arrays.copyOf(fTimes, fTimes.length + 1);
                 fTimes[fTimes.length - 1] = next.freeTime;
                 sizes = Arrays.copyOf(sizes, sizes.length + 1);
                 sizes[sizes.length - 1] = next.size;
-    
+
             }
-            //0
-            //10
-            
-
-
-
-            
+            // 0
+            // 10
 
         }
     }
@@ -142,9 +140,11 @@ class Node {
 
 class FreeList {
     private Node first;
+    long totalSize;
 
     public FreeList() {
         first = null;
+        totalSize = 0;
     }
 
     public boolean isEmpty() {
@@ -176,6 +176,16 @@ class FreeList {
             curr.next = newLink;
 
         }
+
+    }
+
+    public long TotalSize() {
+        Node current = first;
+        while (current != null) {
+            totalSize += current.size;
+            current = current.next;
+        }
+        return totalSize;
 
     }
 
