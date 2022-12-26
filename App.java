@@ -2,9 +2,11 @@
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
+        Scanner input=new Scanner(System.in);
         // dataset
         FreeList list = new FreeList();
         list.free(100); // free list intially one chunk of size 4096kb
@@ -37,8 +39,14 @@ public class App {
             }
         }
         // end of dataset
-
-        worestFit(RequestsQueue, list);
+        System.out.println("press 1 for worst fit \n press 2 for best fit \n press 3 for first fit");
+        int x=input.nextInt();
+        if(x==1)
+            worestFit(RequestsQueue, list);
+        else if(x==2)
+            bestFit(RequestsQueue, list);
+        else 
+            firstFit(RequestsQueue, list);
 
     }// end main
 
