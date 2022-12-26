@@ -7,18 +7,18 @@ public class App {
     public static void main(String[] args) {
         // dataset
         FreeList list = new FreeList();
-        list.free(30); // free list intially one chunk of size 4096kb
+        list.free(100); // free list intially one chunk of size 4096kb
         // requests for memeory allocation
         request[] requestList;
-        requestList = new request[3];
+        requestList = new request[8];
         requestList[0] = new request(0, 10, 3); // 1
         requestList[1] = new request(2, 20, 5); // 3
-        // requestList[2]= new request(10, 50, 16); //5
-        requestList[2] = new request(7, 5, 10); // 4
-        // requestList[4]= new request(20, 100, 25); //7
-        // requestList[5]=new request(12, 120, 15); //6
-        // requestList[6]= new request(1, 5, 6); //2
-        // requestList[7]= new request(22, 500, 26);//8
+         requestList[2]= new request(10, 50, 16); //5
+        requestList[3] = new request(7, 5, 10); // 4
+         requestList[4]= new request(20, 50, 25); //7
+         requestList[5]=new request(12, 120, 15); //6
+         requestList[6]= new request(1, 5, 6); //2
+         requestList[7]= new request(22, 30, 26);//8
 
         int[] time = new int[requestList.length];
         for (int i = 0; i < time.length; i++) {
@@ -101,6 +101,9 @@ public class App {
             } else {
                 System.out.println("Request size " + next.size + " allocated in block size " + max.size);
                 max.size -= next.size;
+                 if(max.size==0){
+                    list.remove(max);
+                }
 
                 x = 1;
             }
@@ -194,6 +197,7 @@ class FreeList {
     }
 
     public void displayFreeList() {
+        if(!isEmpty()){
         Node current = first;
 
         while (current != null) {
@@ -202,7 +206,9 @@ class FreeList {
         }
 
         System.out.println("");
-
+    }else{
+        System.out.println(("empty free list"));
+    }
     }
 
     public void remove(Node x) {
@@ -210,15 +216,17 @@ class FreeList {
         Node prev = null;
         while (current != null) {
             if (current == x) {
-                prev.next = current.next;
                 break;
-
             }
             prev = current;
             current = current.next;
 
         }
-
+        if(current==first)
+        {
+            first=null;
+        }else 
+        prev.next=current.next;
     }
 
 }
