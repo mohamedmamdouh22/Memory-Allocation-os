@@ -1,3 +1,5 @@
+package com.mycompany.app;
+
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -19,7 +21,7 @@ public class App {
          requestList[4]= new request(20, 50, 25); //7
          requestList[5]=new request(12, 120, 15); //6
          requestList[6]= new request(1, 5, 6); //2
-         requestList[7]= new request(22, 15, 26);//8
+         requestList[7]= new request(22, 15, 16);//8
 
         int[] time = new int[requestList.length];
         for (int i = 0; i < time.length; i++) {
@@ -88,7 +90,7 @@ public class App {
                 System.out.println("Request size " + next.size + " can not be allocated");
 
             } else {
-                System.out.println("Request size " + next.size + " allocated in block size " + max.size);
+                System.out.println("Request number ["+i+"]" + " with "+ next.size+" requested is allocated in block size " + max.size);
                 max.size -= next.size;
                  if(max.size==0){
                     list.remove(max);
@@ -173,7 +175,7 @@ public class App {
                 System.out.println("Request size "+next.size+" can not be allocated");
 
             }else{
-                System.out.println("Request size "+next.size+" allocated in block size "+best.size);
+                System.out.println("Request number ["+i+"]" + " with "+ next.size+" requested is allocated in block size "+best.size);
                 best.size-=next.size;
                 x=1;
             }
@@ -202,70 +204,84 @@ public class App {
         list.displayFreeList();
     }
     
-    /**
-     * using first fit algorithm
-     * for choose first free proper chunk to
-     * allocated process
-     * @param queue has process need to allocate
-     * @param list has free chunks at the memory
-     */
-    public static void firstFit(Queue<request> queue, FreeList list) {
-        // no of requests in queue
-        int requests = queue.size();
-        int[] freeTimes = new int[0];
+    public static void firstFit(Queue<request> q, FreeList list) {
+        int reqs = q.size(); // no of requests in queue
+        int[] fTimes = new int[0];
         int[] sizes = new int[0];
-        for (int i = 0; i < requests; i++) {
-            request next = queue.remove();
+
+        for (int i = 0; i < reqs; i++) {
+
+            request next = q.remove();
             for (int j = 0; j < sizes.length; j++) {
-                if (freeTimes[j] < next.arrivalTime) {
+                if (fTimes[j] < next.arrivalTime) {
                     list.free(sizes[j]);
-                    // assign 100000 as big value for the element
-                    freeTimes[j] = 100000;
+                    fTimes[j] = 100000;
                 }
             }
+
+            
+
             // first fit algorithm
-            System.out.println("free list before allocation: ");
+            System.out.println("free list befor allocating: ");
             list.displayFreeList();
-            // assign total 100
             int total = 100;
             long free = list.TotalSize();
+
             System.out.println("Total size " + total + " used: " + (total - free) + " free: " + free);
-            Node current = list.f();
-            int successFlag = 0;
-            // firstFit
-            // assign current element to firstFit
-            Node firstFit = current;
-            while (current != null) {
-                if(current.size>=next.size) {
-                    firstFit = current;
+
+            Node curr = list.f();
+            int x = 0;
+
+            Node first_fit = curr;
+            while (curr != null) {
+                if(curr.size>=next.size)
+                {
+                    first_fit=curr;
                     break;
+                    
                 }
-                current = current.next;
+                    
+                curr=curr.next;
             }
-            if (next.size > firstFit.size) {
+            if (next.size > first_fit.size) {
                 System.out.println("Request size " + next.size + " can not be allocated");
 
             } else {
-                System.out.println("Request size " + next.size + " allocated in block size " + firstFit.size);
-                firstFit.size -= next.size;
-                successFlag = 1;
+                System.out.println("Request number ["+i+"]" + " with "+ next.size+" requested is allocated in block size "+ first_fit.size);
+                first_fit.size -= next.size;
+                // if(first_fit.size==0)
+                  //  list.remove(first_fit);
+                
+
+                x = 1;
             }
 
-            System.out.println("free list after allocation");
+            System.out.println("free list after allocationg");
             list.displayFreeList();
-            // check if allocated is successfully
-            if (successFlag == 1) {
-                freeTimes = Arrays.copyOf(freeTimes, freeTimes.length + 1);
-                freeTimes[freeTimes.length - 1] = next.freeTime;
+
+            System.out.println("*********************************************************");
+            if (x == 1) { // sucessfully allocated
+                fTimes = Arrays.copyOf(fTimes, fTimes.length + 1);
+                fTimes[fTimes.length - 1] = next.freeTime;
                 sizes = Arrays.copyOf(sizes, sizes.length + 1);
                 sizes[sizes.length - 1] = next.size;
+
+            }
+
+            // 0
+            // 10
+
+        }
+        for (int i = 0; i < sizes.length; i++) {
+            if(fTimes[i]!=100000){
+                list.free(sizes[i]);
             }
         }
-        for (int i = 0; i < sizes.length; i++) if(freeTimes[i] < 100000) list.free(sizes[i]);
         System.out.println("*********************************************************");
         System.out.println("Free list after all allocations");
-        list.displayFreeList();
+        list.displayFreeList();   
     }
+    
 }
 
 class Node {
