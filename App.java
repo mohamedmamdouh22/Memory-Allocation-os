@@ -100,6 +100,10 @@ public class App {
             } else {
                 System.out.println("Request size " + next.size + " allocated in block size " + max.size);
                 max.size -= next.size;
+                long total = list.TotalSize();
+                total -= next.size;
+                System.out.println("Total size of free list after allocating: " + total);
+
                 x = 1;
             }
 
