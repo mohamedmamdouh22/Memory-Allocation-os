@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        Scanner input=new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         // dataset
         FreeList list = new FreeList();
         list.free(100); // free list intially one chunk of size 4096kb
@@ -16,12 +16,12 @@ public class App {
         requestList = new request[8];
         requestList[0] = new request(0, 10, 3); // 1
         requestList[1] = new request(2, 20, 5); // 3
-         requestList[2]= new request(10, 50, 16); //5
+        requestList[2] = new request(10, 50, 16); // 5
         requestList[3] = new request(7, 5, 10); // 4
-         requestList[4]= new request(20, 50, 25); //7
-         requestList[5]=new request(12, 120, 15); //6
-         requestList[6]= new request(1, 5, 6); //2
-         requestList[7]= new request(22, 15, 16);//8
+        requestList[4] = new request(20, 50, 25); // 7
+        requestList[5] = new request(12, 120, 15); // 6
+        requestList[6] = new request(1, 5, 6); // 2
+        requestList[7] = new request(22, 15, 16);// 8
 
         int[] time = new int[requestList.length];
         for (int i = 0; i < time.length; i++) {
@@ -41,12 +41,12 @@ public class App {
         }
         // end of dataset
         System.out.println("press 1 for worst fit \npress 2 for best fit \npress 3 for first fit");
-        int x=input.nextInt();
-        if(x==1)
+        int x = input.nextInt();
+        if (x == 1)
             worestFit(RequestsQueue, list);
-        else if(x==2)
+        else if (x == 2)
             bestFit(RequestsQueue, list);
-        else 
+        else
             firstFit(RequestsQueue, list);
 
     }// end main
@@ -62,11 +62,10 @@ public class App {
             for (int j = 0; j < sizes.length; j++) {
                 if (fTimes[j] < next.arrivalTime) {
                     list.free(sizes[j]);
+                    System.out.println("chunk size:" + sizes[j] + "is freed");
                     fTimes[j] = 100000;
                 }
             }
-
-            
 
             // worst fit algorithm
             System.out.println("free list befor allocating: ");
@@ -90,9 +89,10 @@ public class App {
                 System.out.println("Request size " + next.size + " can not be allocated");
 
             } else {
-                System.out.println("Request number ["+i+"]" + " with "+ next.size+" requested is allocated in block size " + max.size);
+                System.out.println("Request number [" + i + "]" + " with " + next.size
+                        + " requested is allocated in block size " + max.size);
                 max.size -= next.size;
-                 if(max.size==0){
+                if (max.size == 0) {
                     list.remove(max);
                 }
 
@@ -116,16 +116,16 @@ public class App {
 
         }
         for (int i = 0; i < sizes.length; i++) {
-            if(fTimes[i]!=100000){
+            if (fTimes[i] != 100000) {
                 list.free(sizes[i]);
             }
         }
         System.out.println("*********************************************************");
         System.out.println("Free list after all allocations");
         list.displayFreeList();
-        
+
     }
-    
+
     public static void bestFit(Queue<request> q, FreeList list) {
         int reqs = q.size(); // no of requests in queue
         int[] fTimes = new int[0];
@@ -136,10 +136,11 @@ public class App {
             for (int j = 0; j < sizes.length; j++) {
                 if (fTimes[j] < next.arrivalTime) {
                     list.free(sizes[j]);
+                    System.out.println("chunk size:" + sizes[j] + "is freed");
                     fTimes[j] = 100000;
                 }
             }
-             
+
             // best fit algorithm
             System.out.println("free list befor allocating: ");
             list.displayFreeList();
@@ -148,54 +149,53 @@ public class App {
 
             System.out.println("Total size " + total + " used: " + (total - free) + " free: " + free);
             Node curr = list.f();
-            int x=0;
-            Node best=curr;
-            
+            int x = 0;
+            Node best = curr;
+
             while (curr != null) {
-                
-                if (best.size<curr.size) {
-                    best=curr;
+
+                if (best.size < curr.size) {
+                    best = curr;
                 }
-                curr=curr.next;
-                
+                curr = curr.next;
+
             }
             curr = list.f();
             while (curr != null) {
-                
-                if (best.size>curr.size&&curr.size>=next.size) {
-                    best=curr;
-                }
-                curr=curr.next;
-                
-            }
-            
-            
-            
-            if(next.size>best.size) {
-                System.out.println("Request size "+next.size+" can not be allocated");
 
-            }else{
-                System.out.println("Request number ["+i+"]" + " with "+ next.size+" requested is allocated in block size "+best.size);
-                best.size-=next.size;
-                x=1;
+                if (best.size > curr.size && curr.size >= next.size) {
+                    best = curr;
+                }
+                curr = curr.next;
+
             }
-            
+
+            if (next.size > best.size) {
+                System.out.println("Request size " + next.size + " can not be allocated");
+
+            } else {
+                System.out.println("Request number [" + i + "]" + " with " + next.size
+                        + " requested is allocated in block size " + best.size);
+                best.size -= next.size;
+                x = 1;
+            }
+
             System.out.println("free list after allocationg");
             list.displayFreeList();
 
-            //=======================
+            // =======================
             System.out.println("*********************************************************");
-            if(x==1){ //sucessfully allocated
+            if (x == 1) { // sucessfully allocated
                 fTimes = Arrays.copyOf(fTimes, fTimes.length + 1);
                 fTimes[fTimes.length - 1] = next.freeTime;
                 sizes = Arrays.copyOf(sizes, sizes.length + 1);
                 sizes[sizes.length - 1] = next.size;
-    
+
             }
-            
+
         }
         for (int i = 0; i < sizes.length; i++) {
-            if(fTimes[i]!=100000){
+            if (fTimes[i] != 100000) {
                 list.free(sizes[i]);
             }
         }
@@ -203,7 +203,7 @@ public class App {
         System.out.println("Free list after all allocations");
         list.displayFreeList();
     }
-    
+
     public static void firstFit(Queue<request> q, FreeList list) {
         int reqs = q.size(); // no of requests in queue
         int[] fTimes = new int[0];
@@ -215,11 +215,10 @@ public class App {
             for (int j = 0; j < sizes.length; j++) {
                 if (fTimes[j] < next.arrivalTime) {
                     list.free(sizes[j]);
+                    System.out.println("chunk size:" + sizes[j] + "is freed");
                     fTimes[j] = 100000;
                 }
             }
-
-            
 
             // first fit algorithm
             System.out.println("free list befor allocating: ");
@@ -234,24 +233,23 @@ public class App {
 
             Node first_fit = curr;
             while (curr != null) {
-                if(curr.size>=next.size)
-                {
-                    first_fit=curr;
+                if (curr.size >= next.size) {
+                    first_fit = curr;
                     break;
-                    
+
                 }
-                    
-                curr=curr.next;
+
+                curr = curr.next;
             }
             if (next.size > first_fit.size) {
                 System.out.println("Request size " + next.size + " can not be allocated");
 
             } else {
-                System.out.println("Request number ["+i+"]" + " with "+ next.size+" requested is allocated in block size "+ first_fit.size);
+                System.out.println("Request number [" + i + "]" + " with " + next.size
+                        + " requested is allocated in block size " + first_fit.size);
                 first_fit.size -= next.size;
                 // if(first_fit.size==0)
-                  //  list.remove(first_fit);
-                
+                // list.remove(first_fit);
 
                 x = 1;
             }
@@ -273,15 +271,15 @@ public class App {
 
         }
         for (int i = 0; i < sizes.length; i++) {
-            if(fTimes[i]!=100000){
+            if (fTimes[i] != 100000) {
                 list.free(sizes[i]);
             }
         }
         System.out.println("*********************************************************");
         System.out.println("Free list after all allocations");
-        list.displayFreeList();   
+        list.displayFreeList();
     }
-    
+
 }
 
 class Node {
@@ -353,21 +351,22 @@ class FreeList {
     }
 
     public void displayFreeList() {
-        if(!isEmpty()){
-        Node current = first;
+        if (!isEmpty()) {
+            Node current = first;
 
-        while (current != null) {
-            if(current.size==0)
-                current = current.next;
-            else{
-            current.displayNode();
-            current = current.next;}
+            while (current != null) {
+                if (current.size == 0)
+                    current = current.next;
+                else {
+                    current.displayNode();
+                    current = current.next;
+                }
+            }
+
+            System.out.println("");
+        } else {
+            System.out.println(("empty free list"));
         }
-
-        System.out.println("");
-    }else{
-        System.out.println(("empty free list"));
-    }
     }
 
     public void remove(Node x) {
@@ -381,11 +380,10 @@ class FreeList {
             current = current.next;
 
         }
-        if(current==first)
-        {
-            first=null;
-        }else 
-        prev.next=current.next;
+        if (current == first) {
+            first = null;
+        } else
+            prev.next = current.next;
     }
 
 }
